@@ -26,9 +26,8 @@ fn is_valid(arr: &Vec<Vec<char>>, row: isize, col: isize) -> bool {
                 continue;
             }
 
-            let (c_row, c_col) = ((row + r) as usize, (col + c) as usize);
             // Only check in bounds
-            if arr.get(c_row).is_some_and(|inner| inner.get(c_col).is_some_and(|c| *c == '@')) {
+            if arr.get((row + r) as usize).is_some_and(|inner| inner.get((col + c) as usize).is_some_and(|c| *c == '@')) {
                 rolls_in_range += 1;
             } 
         }
@@ -38,12 +37,12 @@ fn is_valid(arr: &Vec<Vec<char>>, row: isize, col: isize) -> bool {
 }
 
 fn part_1(input: &str) -> u64 {
-    let arr = parse_input(input);
+    let mut arr = parse_input(input);
     let mut count = 0;
 
-    for (row, v_row) in arr.iter().enumerate() {
-        for (col, &v_col) in v_row.iter().enumerate() {
-            if v_col == '@' {
+    for (row, v_row) in arr.clone().iter().enumerate() {
+        for (col, v_col) in v_row.iter().enumerate() {
+            if *v_col == '@' {
                 if is_valid(&arr, row.try_into().unwrap(), col.try_into().unwrap()) {
                     count += 1;
                 }
@@ -55,10 +54,21 @@ fn part_1(input: &str) -> u64 {
 }
 
 fn part_2(input: &str) -> u64 {
-    let arr = parse_input(input);
-    let mut sum = 0;
+    let mut arr = parse_input(input);
+    let mut count = 0;
 
-    sum
+    for (row, v_row) in arr.clone().iter().enumerate() {
+        for (col, v_col) in v_row.iter().enumerate() {
+            if *v_col == '@' {
+                if is_valid(&arr, row.try_into().unwrap(), col.try_into().unwrap()) {
+                    arr[row][col] = 'x';
+                    count += 1;
+                }
+            }
+        }
+    }
+
+    count
 }
 
 fn main() {}
@@ -79,11 +89,11 @@ mod tests {
         println!("count {}", part_1(input));
     }
 
-    // #[test]
-    // fn test_part_two_example() {
-    //     let input = include_str!("example.txt");
-    //     assert_eq!(part_2(input), 3121910778619);
-    // }
+    #[test]
+    fn test_part_two_example() {
+        let input = include_str!("example.txt");
+        assert_eq!(part_2(input), 43);
+    }
 
     // #[test]
     // fn test_part_two_input() {

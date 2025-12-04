@@ -94,6 +94,6 @@ mod tests {
     #[test]
     fn test_part_two_input() {
         let input = include_str!("input.txt");
-        println!("Sum is {}", part_2(input));
+        println!("count {}", part_2(input));
     }
 }

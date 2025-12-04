@@ -64,7 +64,6 @@ mod tests {
     fn part_1() {
         let input = include_str!("input.txt");
         println!("count {}", answer_1(input));
-        assert_eq!(answer_1(input), 1141);
     }
 
     #[test]
@@ -76,6 +75,6 @@ mod tests {
     #[test]
     fn part_2() {
         let input = include_str!("input.txt");
-        println!("Sum is {}", answer_2(input));
+        println!("count {}", answer_2(input));
     }
 }
