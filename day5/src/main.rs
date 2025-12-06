@@ -45,22 +45,18 @@ fn part_2(input: &str) -> u64 {
     let mut data = parse_input(input);
     let mut merged: Vec<(u64, u64)> = Vec::new();
 
-    // Sort by start coordinate
     data.ranges.sort_by_key(|r| r.0);
 
     for (start, end) in data.ranges {
         if let Some(last) = merged.last_mut() {
-            // If the ranges overlap or touch, merge them
             if start <= last.1 + 1 {
                 last.1 = last.1.max(end);
                 continue;
             }
         }
-        // Otherwise, push a new disjoint range
         merged.push((start, end));
     }
 
-    // Sum sizes of merged ranges
     merged
         .iter()
         .map(|(s, e)| e - s + 1)
