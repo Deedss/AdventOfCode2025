@@ -1,5 +1,3 @@
-use std::{str::Chars, u64, vec};
-
 #[allow(dead_code)]
 
 struct Calc {
@@ -64,8 +62,55 @@ fn part_1(input: &str) -> u64 {
     sum
 }
 
+fn transform(mut vec: Vec<Vec<char>>) -> Vec<u64> {
+    // from ["123", "45", "6"]
+    // to [356, 24, 1]
+    let mut vals = vec![];
+    let rows = vec.iter().map(|v| v.len()).max().unwrap();
+    let cols = vec.len();
+
+    // reverse to ["321", "54", "6"]
+    for vars in vec.iter_mut() {
+        vars.reverse();
+    }
+
+    for row in 0..rows {
+        let mut string = String::new();
+        for vars in vec.iter() {
+            if let Some(c) = vars.get(row) {
+                string.push(*c);
+            }
+        }
+        vals.push(string.parse::<u64>().unwrap());
+    }
+
+    println!("{:?}", vals);
+
+    vals
+}
+
 fn get_values_part2(input: &str) -> Vec<Vec<u64>> {
-    vec![]
+    let tmp: Vec<Vec<Vec<char>>> = input
+        .lines()
+        .take(input.lines().count() - 1)
+        .map(|line| {
+            line.split_whitespace()
+                .map(|s| s.chars().collect())
+                .collect()
+        })
+        .collect();
+
+    let mut transposed: Vec<Vec<Vec<char>>> = vec![vec![vec![]; tmp.iter().len()]; tmp[0].len()];
+    for (i, row) in tmp.iter().enumerate() {
+        for (j, val) in row.iter().enumerate() {
+            transposed[j][i] = val.to_vec();
+        }
+    }
+
+    transposed
+        .iter()
+        .map(|vec| transform(vec.to_vec()))
+        .collect()
 }
 
 fn part_2(input: &str) -> u64 {
@@ -86,7 +131,6 @@ fn part_2(input: &str) -> u64 {
 
     sum
 }
-
 
 fn main() {}
 
@@ -112,9 +156,9 @@ mod tests {
         assert_eq!(part_2(input), 3263827);
     }
 
-    // #[test]
-    // fn test_part_two_input() {
-    //     let input = include_str!("input.txt");
-    //     println!("count {}", part_2(input));
-    // }
+    #[test]
+    fn test_part_two_input() {
+        let input = include_str!("input.txt");
+        println!("count {}", part_2(input));
+    }
 }
